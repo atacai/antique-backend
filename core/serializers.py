@@ -11,7 +11,7 @@ class ProductListSerializer(serializers.ModelSerializer):
         exclude = ['description', 'price']
         
 
-class ProductDetailSerializer(serializers.ModelSerializer):
+class ProductRetrieveSerializer(serializers.ModelSerializer):
     image = serializers.CharField(source='image_uri')
 
     class Meta:
