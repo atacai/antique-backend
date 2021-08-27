@@ -16,6 +16,11 @@ class Bid(models.Model):
     def __str__(self):
         return '%s-%s: %s' % (self.user.username, self.product.name, self.amount)
 
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        if self.product.price >= self.amount or (Bid.objects.last() and self.amount >= Bid.objects.last().amount):
+            raise ValueError(_("Amount is not allowed"))
+        return super().save(force_insert, force_update, using, update_fields)
+
 
 class AutoBidConfig(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_auto_bids')
