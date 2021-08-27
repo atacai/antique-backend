@@ -3,6 +3,7 @@ from rest_framework import routers
 
 from .views import ProductReadOnlyModelViewSet
 
+
 router = routers.SimpleRouter()
 router.register(r'products', ProductReadOnlyModelViewSet)
 
