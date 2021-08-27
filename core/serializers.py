@@ -9,3 +9,11 @@ class ProductListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         exclude = ['description', 'price']
+        
+
+class ProductDetailSerializer(serializers.ModelSerializer):
+    image = serializers.CharField(source='image_uri')
+
+    class Meta:
+        model = Product
+        fields = '__all__'
