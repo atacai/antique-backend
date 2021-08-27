@@ -1,6 +1,9 @@
+import base64
+from io import BytesIO
 import os
-import zipfile
 from pathlib import Path
+from PIL import Image
+import zipfile
 
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
@@ -50,3 +53,20 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def image_uri(self):
+        """Return data uri of product image that has been compressed into zip file"""
+        if self.image:
+            file_extension = next(iter(Path(self.image.path).suffixes)).replace('.', '').lower()
+            if file_extension == 'jpg':
+                file_extension = 'jpeg'
+            with zipfile.ZipFile(self.image.path) as archive:
+                for entry in archive.infolist():
+                    with archive.open(entry) as image_file:
+                        img = Image.open(image_file)
+                        data = BytesIO()
+                        img.save(data, file_extension)
+                        data64 = base64.b64encode(data.getvalue())
+                        return u'data:img/{0};base64,{1}'.format(file_extension, data64.decode('utf-8'))
+        return
