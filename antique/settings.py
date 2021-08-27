@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'auction.apps.AuctionConfig',
     'core.apps.CoreConfig',
     'rest_framework',
 
